@@ -1,0 +1,6 @@
+[submodule "lib/codal"]
+	path = lib/codal
+	url = https://github.com/yumium/codal
+[submodule "lib/micropython"]
+	path = lib/micropython
+	url = https://github.com/yumium/micropython

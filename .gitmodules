@@ -4,3 +4,4 @@
 [submodule "lib/micropython"]
 	path = lib/micropython
 	url = https://github.com/yumium/micropython
+	branch = stable

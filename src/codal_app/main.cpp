@@ -27,6 +27,7 @@
 #include "main.h"
 
 #define MICROPY_TIMER_EVENT (0x1001)
+#define MICROPY_NOISE_EVENT (0x1002)
 
 extern "C" void mp_main(void);
 extern "C" void m_printf(...);
@@ -34,6 +35,7 @@ extern "C" void microbit_hal_timer_callback(void);
 extern "C" void microbit_hal_gesture_callback(int);
 extern "C" void microbit_hal_level_detector_callback(int);
 extern "C" void microbit_hal_clap_detector_level_callback(int);
+extern "C" void microbit_hal_clap_detector_callback(void);
 extern "C" void microbit_radio_irq_handler(void);
 
 MicroBit uBit;
@@ -51,6 +53,10 @@ void level_detector_event_handler(Event evt) {
     microbit_hal_clap_detector_level_callback(evt.value);
 }
 
+void clap_detector_event_handler(Event evt) {
+    microbit_hal_clap_detector_callback();
+}
+
 int main() {
     uBit.init();
 
@@ -66,9 +72,12 @@ int main() {
     uBit.messageBus.listen(DEVICE_ID_SERIAL, CODAL_SERIAL_EVT_DELIM_MATCH, serial_interrupt_handler, MESSAGE_BUS_LISTENER_IMMEDIATE);
     uBit.messageBus.listen(DEVICE_ID_GESTURE, DEVICE_EVT_ANY, gesture_event_handler);
     uBit.messageBus.listen(DEVICE_ID_SYSTEM_LEVEL_DETECTOR, DEVICE_EVT_ANY, level_detector_event_handler);
+    uBit.messageBus.listen(MICROPY_NOISE_EVENT, DEVICE_EVT_ANY, clap_detector_event_handler, MESSAGE_BUS_LISTENER_IMMEDIATE);
 
     // 6ms follows the micro:bit v1 value
     system_timer_event_every(6, MICROPY_TIMER_EVENT, 1);
+    // 40ms follows the online python editor's 25 noise recordings per second
+    system_timer_event_every(40, MICROPY_NOISE_EVENT, 1);
 
     uBit.display.setBrightness(255);
 

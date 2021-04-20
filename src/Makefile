@@ -1,7 +1,7 @@
 CODAL_DIR = ../lib/codal
 RM = /bin/rm
 MKDIR = /bin/mkdir
-PYTHON3 ?= python
+PYTHON3 ?= python3
 
 BUILD = ./build
 CODAL_BUILD = $(CODAL_DIR)/build

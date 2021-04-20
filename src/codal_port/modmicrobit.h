@@ -189,6 +189,9 @@ extern const struct _microbit_speaker_obj_t microbit_speaker_obj;
 extern const struct _microbit_microphone_obj_t microbit_microphone_obj;
 extern const struct _microbit_button_obj_t microbit_button_a_obj;
 extern const struct _microbit_button_obj_t microbit_button_b_obj;
+extern const struct _microbit_clap_detector_obj_t microbit_clap_detector_obj;
+
+extern void microbit_hal_utime_interrupt_callback();
 
 const microbit_pin_obj_t *microbit_obj_get_pin(mp_const_obj_t o);
 uint8_t microbit_obj_get_pin_name(mp_obj_t o);

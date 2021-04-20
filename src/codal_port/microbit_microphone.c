@@ -119,6 +119,7 @@ STATIC mp_obj_t microbit_microphone_is_event(mp_obj_t self_in, mp_obj_t sound_in
     uint8_t sound = sound_event_from_obj(sound_in);
     return mp_obj_new_bool(sound == sound_event_current);
 }
+
 STATIC MP_DEFINE_CONST_FUN_OBJ_2(microbit_microphone_is_event_obj, microbit_microphone_is_event);
 
 STATIC mp_obj_t microbit_microphone_was_event(mp_obj_t self_in, mp_obj_t sound_in) {
@@ -146,6 +147,7 @@ STATIC mp_obj_t microbit_microphone_get_events(mp_obj_t self_in) {
     sound_event_history_index = 0;
     return o;
 }
+
 STATIC MP_DEFINE_CONST_FUN_OBJ_1(microbit_microphone_get_events_obj, microbit_microphone_get_events);
 
 STATIC const mp_rom_map_elem_t microbit_microphone_locals_dict_table[] = {

@@ -33,6 +33,7 @@ extern "C" void m_printf(...);
 extern "C" void microbit_hal_timer_callback(void);
 extern "C" void microbit_hal_gesture_callback(int);
 extern "C" void microbit_hal_level_detector_callback(int);
+extern "C" void microbit_hal_clap_detector_level_callback(int);
 extern "C" void microbit_radio_irq_handler(void);
 
 MicroBit uBit;
@@ -47,6 +48,7 @@ void gesture_event_handler(Event evt) {
 
 void level_detector_event_handler(Event evt) {
     microbit_hal_level_detector_callback(evt.value);
+    microbit_hal_clap_detector_level_callback(evt.value);
 }
 
 int main() {

@@ -26,16 +26,16 @@ const char* GetString_ETHOSU();
 
 AllOpsResolver::AllOpsResolver() {
   // Please keep this list of Builtin Operators in alphabetical order.
-  AddAbs();
+  /* AddAbs();
   AddAdd();
   AddArgMax();
   AddArgMin();
-  AddAveragePool2D();
+  // AddAveragePool2D();
   AddCeil();
   AddConcatenation();
-  AddConv2D();
-  AddCos();
-  AddDepthwiseConv2D();
+  // AddConv2D();
+  // AddCos();
+  // AddDepthwiseConv2D();
   AddDequantize();
   AddEqual();
   AddFloor();
@@ -51,7 +51,7 @@ AllOpsResolver::AllOpsResolver() {
   AddLogicalOr();
   AddLogistic();
   AddMaximum();
-  AddMaxPool2D();
+  // AddMaxPool2D();
   AddMean();
   AddMinimum();
   AddMul();
@@ -65,10 +65,10 @@ AllOpsResolver::AllOpsResolver() {
   AddRelu();
   AddRelu6();
   AddReshape();
-  AddResizeNearestNeighbor();
+  // AddResizeNearestNeighbor();
   AddRound();
   AddRsqrt();
-  AddSin();
+  // AddSin();
   AddSoftmax();
   AddSplit();
   AddSqrt();
@@ -76,8 +76,8 @@ AllOpsResolver::AllOpsResolver() {
   AddStridedSlice();
   AddSub();
   AddSvdf();
-  AddTanh();
-  AddUnpack();
+  // AddTanh();
+  AddUnpack(); */
 
   // TODO(b/159644355): Figure out if custom Ops belong in AllOpsResolver.
   TfLiteRegistration* registration =

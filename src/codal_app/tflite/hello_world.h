@@ -37,4 +37,4 @@ limitations under the License.
 #include "tensorflow/lite/micro/micro_interpreter.h"
 
 extern "C" void setup();
-extern "C" void loop();
+extern "C" float loop();

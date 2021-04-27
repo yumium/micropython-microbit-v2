@@ -28,6 +28,7 @@
 #include "py/runtime.h"
 #include "py/mphal.h"
 #include "modmicrobit.h"
+#include "tflite/main_functions.h"
 
 // #include "tensorflow/lite/micro/all_ops_resolver.h"
 // #include "tensorflow/lite/micro/micro_error_reporter.h"
@@ -69,8 +70,9 @@ static volatile bool detected = false;
 
 STATIC void microphone_init(void) {
     microbit_hal_microphone_init();
-    // mp_printf(&mp_plat_print, "kInferencesPerCycle: %d", kInferencesPerCycle);
+    // mp_printf(&mp_plat_print, "Starting TFLite setup.");
     // setup();
+    // mp_printf(&mp_plat_print, "Finished TFLite setup.");
 }
 
 void microbit_hal_clap_detector_callback(void) {

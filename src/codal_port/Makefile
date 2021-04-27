@@ -60,6 +60,7 @@ SRC_C += \
 	main.c \
 	microbit_accelerometer.c \
 	microbit_button.c \
+	microbit_clap_detector.c \
 	microbit_compass.c \
 	microbit_display.c \
 	microbit_i2c.c \

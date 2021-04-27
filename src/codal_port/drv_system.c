@@ -28,8 +28,12 @@
 #include "drv_system.h"
 #include "drv_display.h"
 #include "modmusic.h"
+#include "modmicrobit.h"
+
+#define CLAP_DETECTOR_MODEL_FREQUENCY (200) // This x 6ms is how often the model runs
 
 extern volatile bool accelerometer_up_to_date;
+static uint8_t counter = 0;
 
 void microbit_system_init(void) {
     accelerometer_up_to_date = false;
@@ -44,6 +48,12 @@ void microbit_hal_timer_callback(void) {
 
     microbit_display_update();
     microbit_music_tick();
+    
+    counter++;
+    if (counter == CLAP_DETECTOR_MODEL_FREQUENCY) {
+        counter = 0;
+        microbit_hal_utime_interrupt_callback();
+    }
 }
 
 void microbit_hal_serial_interrupt_callback(void) {

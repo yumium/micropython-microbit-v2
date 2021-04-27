@@ -25,6 +25,11 @@
  */
 
 #include "main.h"
+// #include "../../lib/codal/libraries/codal-microbit-v2/inc/compat/mbed.h"
+// #include "TensorFlowLite.h"
+// #include "tflite/model.h"
+#include "tflite/main_functions.h"
+#include "tflite/hello_world.h"
 
 #define MICROPY_TIMER_EVENT (0x1001)
 #define MICROPY_NOISE_EVENT (0x1002)
@@ -83,6 +88,8 @@ int main() {
     // select the correct pin when any audio related code is first executed.
     uBit.audio.setSpeakerEnabled(true);
     uBit.audio.setPinEnabled(false);
+
+    setup();
 
     mp_main();
     return 0;

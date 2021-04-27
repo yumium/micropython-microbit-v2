@@ -29,6 +29,22 @@
 #include "py/mphal.h"
 #include "modmicrobit.h"
 
+// #include "tensorflow/lite/micro/all_ops_resolver.h"
+// #include "tensorflow/lite/micro/micro_error_reporter.h"
+// #include "tensorflow/lite/micro/micro_interpreter.h"
+// #include "tensorflow/lite/schema/schema_generated.h"
+// #include "tensorflow/lite/version.h"
+
+// #include "../codal/libraries/codal-microbit-v2/inc/compat/mbed.h"
+
+// #include "tflite/TensorFlowLite.h"
+// #include "tflite/model.h"
+// #include "tflite/main_functions.h"
+// #include "tflite/hello_world.h"
+
+// #include "tflite/mbed.h"
+
+
 #define GET_PIXEL(x, y) microbit_hal_display_get_pixel(x, y)
 #define SET_PIXEL(x, y, v) microbit_hal_display_set_pixel(x, y, v)
 // Update based on browser to micro:bit pipeline
@@ -53,6 +69,8 @@ static volatile bool detected = false;
 
 STATIC void microphone_init(void) {
     microbit_hal_microphone_init();
+    // mp_printf(&mp_plat_print, "kInferencesPerCycle: %d", kInferencesPerCycle);
+    // setup();
 }
 
 void microbit_hal_clap_detector_callback(void) {

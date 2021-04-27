@@ -1,7 +1,7 @@
 CODAL_DIR = ../lib/codal
-RM = /bin/rm
-MKDIR = /bin/mkdir
-PYTHON3 ?= python
+RM = rm
+MKDIR = mkdir
+PYTHON3 ?= python3
 
 BUILD = ./build
 CODAL_BUILD = $(CODAL_DIR)/build
@@ -13,10 +13,10 @@ DEST_HEX = ./MICROBIT.hex
 define CODAL_CLEAN
 	git -C $(CODAL_DIR) checkout CMakeLists.txt
 endef
-
+ 
 define CODAL_PATCH
 	$(call CODAL_CLEAN)
-	cat codal.patch | git -C $(CODAL_DIR) apply -
+	cat codal.patch | git -C $(CODAL_DIR) apply --ignore-whitespace -
 endef
 
 .PHONY: all codal_cmake codal_build libmicropython clean

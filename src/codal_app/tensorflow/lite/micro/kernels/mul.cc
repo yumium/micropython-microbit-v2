@@ -1,5 +1,5 @@
 // Patched by Edge Impulse to include reference, CMSIS-NN and ARC kernels
-#include "../../../../classifier/ei_classifier_config.h"
+// #include "../../../../classifier/ei_classifier_config.h"
 #if 0 == 1
 /* noop */
 #elif EI_CLASSIFIER_TFLITE_ENABLE_CMSIS_NN == 1

@@ -92,9 +92,6 @@ class MicroInterpreter {
   // intermediate tensors.
   TfLiteStatus AllocateTensors();
 
-  // TEST FUNCTION
-  int Test();
-
   // In order to support partial graph runs for strided models, this can return
   // values other than kTfLiteOk and kTfLiteError.
   // TODO(b/149795762): Add this to the TfLiteStatus enum.

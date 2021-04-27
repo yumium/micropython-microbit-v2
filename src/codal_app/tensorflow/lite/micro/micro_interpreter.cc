@@ -198,10 +198,6 @@ TfLiteStatus MicroInterpreter::AllocateTensors() {
     }
   }
 
-  int Test() {
-    return 1;
-  }
-
   // Only allow AllocatePersistentBuffer in Init stage.
   context_.AllocatePersistentBuffer = context_helper_.AllocatePersistentBuffer;
   context_.RequestScratchBufferInArena = nullptr;

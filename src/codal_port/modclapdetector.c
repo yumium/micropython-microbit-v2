@@ -29,6 +29,7 @@
 #include "py/mphal.h"
 #include "modmicrobit.h"
 #include "tflite/main_functions.h"
+#include <string.h>
 
 // #include "tensorflow/lite/micro/all_ops_resolver.h"
 // #include "tensorflow/lite/micro/micro_error_reporter.h"
@@ -51,46 +52,83 @@
 // Update based on browser to micro:bit pipeline
 #define DEFAULT_MODEL_NAME "model.cpp"
 // Should match input size for the ML model
-#define EVENT_HISTORY_SIZE (75)
+#define EVENT_HISTORY_SIZE (70)
+// Microphone volume which claps must meet or exceed 
+#define VOLUME_THRESHOLD (5)
+// Match probability required to consider a clap detected
+#define MATCH_THRESHOLD (0.95)
+// Turn on for debugging
+#define DEBUGGING false
 
-// So we know where to take events from in the circular array buffer
-static uint8_t sound_event_history_index_start = 0;
+// Index at which events can be read from in the circular array buffer
+uint8_t sound_event_history_index_start = 0;
 // Index at which new events should be added
-static uint8_t sound_event_history_index_end = 0;
+uint8_t sound_event_history_index_end = 0;
 // Indicates if the sound history array is full
-static bool array_filled = false;
+bool array_filled = false;
 // Circular array buffer for sound events
-static bool sound_event_history_array[EVENT_HISTORY_SIZE];
+int8_t sound_event_history_array[EVENT_HISTORY_SIZE];
 
 // Indicates if the ClapDetector is currently active and listening
-static volatile bool listening = false;
-// True if the ClapDetector found a match since last check
-// Reset to false by was_detected function
-static volatile bool detected = false;
+volatile bool listening = false;
+// True if the ClapDetector found a match since last call to was_detected
+volatile bool detected = false;
 
+// Called when ClapDetector is turned on to listen
 STATIC void microphone_init(void) {
+    // Initialize microphone
     microbit_hal_microphone_init();
-    // mp_printf(&mp_plat_print, "Starting TFLite setup.");
-    // setup();
-    // mp_printf(&mp_plat_print, "Finished TFLite setup.");
+    // NOTE: setup() called in main.cpp during initialization
+}
+
+void reset_sound_event_history(void) {
+    // Reset event_history array
+    sound_event_history_index_start = 0;
+    sound_event_history_index_end = 0;
+    array_filled = false;
 }
 
 void microbit_hal_clap_detector_callback(void) {
     if (listening) {
-        // Initialize microphone
-        microphone_init();
         // Work out the sound level.
         int sound = microbit_hal_microphone_get_level();
-        bool ev = (sound >= 10);
-        // For debugging
-        mp_printf(&mp_plat_print, "%d -> %s\n", sound, ev ? "true" : "false");
+        bool ev = (sound >= VOLUME_THRESHOLD);
+        if (DEBUGGING) {
+            mp_printf(&mp_plat_print, "%d -> %s\n", sound, ev ? "true" : "false");
+        }
 
         // Add sound event to the history.
-        sound_event_history_array[sound_event_history_index_end++] = ev;
+        sound_event_history_array[sound_event_history_index_end] = ev ? 1 : 0;
+        sound_event_history_index_end = (sound_event_history_index_end + 1) % EVENT_HISTORY_SIZE;
         
         if (array_filled) {
-            // TODO: call clap detector ML module
-            sound_event_history_index_start++;
+            // Update pointer to first element in sound history circular array
+            sound_event_history_index_start = (sound_event_history_index_start + 1) % EVENT_HISTORY_SIZE;
+
+            // Copy sound_event_history to new array, in order
+            int8_t input[EVENT_HISTORY_SIZE];
+            for (uint8_t i = 0; i < EVENT_HISTORY_SIZE; i++) {
+                input[i] = sound_event_history_array[(i + sound_event_history_index_start) % EVENT_HISTORY_SIZE];
+            }
+
+            // Classify the input using the ML model
+            float res = predict(input);
+            if (DEBUGGING) {
+                // Print sound event array to be passed to the ML model
+                mp_printf(&mp_plat_print, "[");
+                for (uint8_t i = 0; i < EVENT_HISTORY_SIZE; i++) {
+                    mp_printf(&mp_plat_print, "%d,", input[i]);
+                }
+                mp_printf(&mp_plat_print, "]\n");
+                // Print result
+                mp_printf(&mp_plat_print, "Res: %2.2f\n", res);
+            }
+
+            // If clap pattern matched, set detected to true 
+            if (res > MATCH_THRESHOLD) {
+                detected = true;
+                reset_sound_event_history();
+            }
         } else if (sound_event_history_index_start == sound_event_history_index_end) {
             array_filled = true;
         }
@@ -215,6 +253,8 @@ MP_DEFINE_CONST_FUN_OBJ_0(clapdetector_listen_obj, clapdetector_listen);
 
 STATIC mp_obj_t clapdetector_stop(void) {
     listening = false;
+    detected = false;
+    reset_sound_event_history();
     mp_printf(&mp_plat_print, "Clapdetector stopped.\n");
     return mp_const_none;
 }

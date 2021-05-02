@@ -74,50 +74,24 @@ void setup() {
 }
 
 // The name of this function is important for Arduino compatibility.
-float loop() {
-  // Calculate an x value to feed into the model. We compare the current
-  // inference_count to the number of inferences per cycle to determine
-  // our position within the range of possible x values the model was
-  // trained on, and use this to calculate a value.
-  float position = static_cast<float>(inference_count) /
-                   static_cast<float>(kInferencesPerCycle);
-  float x = position * kXrange;
-
-  // Quantize the input from floating-point to integer
-  int8_t x_quantized = x / input->params.scale + input->params.zero_point;
-  // Place the quantized input in the model's input tensor
-  input->data.int8[0] = x_quantized;
+float predict(int8_t in[]) {
+  // Place the input data in the model's input tensor
+  for (int i = 0; i < 70; i++) {
+    input->data.f[i] = in[i];
+  }
 
   // Run inference, and report any error
   TfLiteStatus invoke_status = interpreter->Invoke();
   if (invoke_status != kTfLiteOk) {
-    TF_LITE_REPORT_ERROR(error_reporter, "Invoke failed on x: %f\n",
-                         static_cast<double>(x));
-    return 0;
+    std::string s = "[";
+    for (int i = 0; i < 70; i++) {
+      s += in[i];
+    }
+    s += "]";
+    TF_LITE_REPORT_ERROR(error_reporter, "Invoke failed on input: %s", s);
+    return false;
   }
 
-  // Obtain the quantized output from model's output tensor
-  int8_t y_quantized = output->data.int8[0];
-  // Dequantize the output from integer to floating-point
-  float y = (y_quantized - output->params.zero_point) * output->params.scale;
-
-  // Output the results. A custom HandleOutput function can be implemented
-  // for each supported hardware target.
-
-
-
-
-
-  // TODO
-  // HandleOutput(error_reporter, x, y);
-
-
-
-
-  // Increment the inference_counter, and reset it if we have reached
-  // the total number per cycle
-  inference_count += 1;
-  if (inference_count >= kInferencesPerCycle) inference_count = 0;
-
-  return y;
+  // Return the match probability from model's output tensor
+  return output->data.f[1];
 }

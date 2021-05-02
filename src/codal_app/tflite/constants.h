@@ -27,6 +27,6 @@ const float kXrange = 2.f * 3.14159265359f;
 // of this constant can be tuned so that one full cycle takes a desired amount
 // of time. Since different devices take different amounts of time to perform
 // inference, this value should be defined per-device.
-extern const int kInferencesPerCycle;
+const int kInferencesPerCycle = 80;
 
 #endif  // TENSORFLOW_LITE_MICRO_EXAMPLES_HELLO_WORLD_CONSTANTS_H_

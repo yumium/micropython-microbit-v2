@@ -31,10 +31,9 @@ limitations under the License.
 #include "model.h"
 #include "output_handler.h"
 #include "tensorflow/lite/micro/micro_error_reporter.h"
-// #include "tensorflow/lite/micro/system_setup.h"
 #include "tensorflow/lite/schema/schema_generated.h"
 #include "tensorflow/lite/version.h"
 #include "tensorflow/lite/micro/micro_interpreter.h"
 
 extern "C" void setup();
-extern "C" float loop();
+extern "C" float predict(int8_t x[]);

@@ -1,5 +1,5 @@
 /* TODO:
- * Get model.predict(arr) working
+ * Get model.call_predict(arr) working
  */
 
 #include "py/runtime.h"
@@ -34,7 +34,7 @@ static uint32_t current_sample_timestamp = 0;
 static uint32_t last_predicted_timestamp = 0;
 
 // Stand in until ML is working
-bool predict(bool array[NUMBER_OF_SAMPLES]) {
+bool call_predict(bool array[NUMBER_OF_SAMPLES]) {
     return array[0];
 }
 
@@ -77,7 +77,7 @@ void microbit_hal_utime_interrupt_callback() {
         for (uint8_t i = 0; i < NUMBER_OF_SAMPLES; i++) {
             flat_array[i] = samples_array[(i + samples_index) % NUMBER_OF_SAMPLES];
         }
-        detected = predict(flat_array) | detected;
+        detected = call_predict(flat_array) | detected;
         last_predicted_timestamp = current_sample_timestamp;
     }
 }

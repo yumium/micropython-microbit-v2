@@ -28,7 +28,7 @@
 // #include "../../lib/codal/libraries/codal-microbit-v2/inc/compat/mbed.h"
 // #include "TensorFlowLite.h"
 #include "tflite/model.h"
-#include "tflite/hello_world.h"
+#include "tflite/tflite_predict.h"
 #include "tflite/main_functions.h"
 
 #define MICROPY_TIMER_EVENT (0x1001)

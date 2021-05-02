@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-#include "hello_world.h"
+#include "tflite_predict.h"
 
 // Globals, used for compatibility with Arduino-style sketches.
 namespace {
@@ -30,8 +30,6 @@ uint8_t tensor_arena[kTensorArenaSize];
 
 // The name of this function is important for Arduino compatibility.
 void setup() {
-  // tflite::InitializeTarget();
-
   // Set up logging. Google style is to avoid globals or statics because of
   // lifetime uncertainty, but since this has a trivial destructor it's okay.
   // NOLINTNEXTLINE(runtime-global-variables)
@@ -68,9 +66,6 @@ void setup() {
   // Obtain pointers to the model's input and output tensors.
   input = interpreter->input(0);
   output = interpreter->output(0);
-
-  // Keep track of how many inferences we have performed.
-  inference_count = 0;
 }
 
 // The name of this function is important for Arduino compatibility.

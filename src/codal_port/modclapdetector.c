@@ -31,22 +31,6 @@
 #include "tflite/main_functions.h"
 #include <string.h>
 
-// #include "tensorflow/lite/micro/all_ops_resolver.h"
-// #include "tensorflow/lite/micro/micro_error_reporter.h"
-// #include "tensorflow/lite/micro/micro_interpreter.h"
-// #include "tensorflow/lite/schema/schema_generated.h"
-// #include "tensorflow/lite/version.h"
-
-// #include "../codal/libraries/codal-microbit-v2/inc/compat/mbed.h"
-
-// #include "tflite/TensorFlowLite.h"
-// #include "tflite/model.h"
-// #include "tflite/main_functions.h"
-// #include "tflite/hello_world.h"
-
-// #include "tflite/mbed.h"
-
-
 #define GET_PIXEL(x, y) microbit_hal_display_get_pixel(x, y)
 #define SET_PIXEL(x, y, v) microbit_hal_display_set_pixel(x, y, v)
 // Update based on browser to micro:bit pipeline
